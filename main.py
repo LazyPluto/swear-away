@@ -22,10 +22,10 @@ class SwearAwayBot(discord.Client):
 
 		if "fuck" in message.content.lower():
 			await message.delete()
-			await message.channel.send(prettify_message(message.author.name, message.content.replace("fuck", "flower")), allowed_mentions=allowed_mentions)
+			await message.channel.send(prettify_message(message.author.mention, message.content.replace("fuck", "flower")), allowed_mentions=allowed_mentions)
 
 def prettify_message(author_name: str, message: str):
-	return f"@{author_name}:\n\"{message}\""
+	return f"{author_name}:\n\"{message}\""
 
 bot = SwearAwayBot(intents=intents)
 bot.run(env.BOT_TOKEN)
