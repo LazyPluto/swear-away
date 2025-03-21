@@ -11,6 +11,9 @@ intents.guild_messages = True
 intents.guilds = True
 bot = commands.Bot(command_prefix='!', intents=intents)
 
+def prettify_message(author_name: str, message: str):
+	return f"@{author_name}:\n{message}"
+
 @bot.event
 async def on_ready():
 	print(f'Logged in as {bot.user.name}')
@@ -22,7 +25,9 @@ async def on_message(message: discord.Message):
 		return
 
 	if "fuck" in message.content.lower():
-		await message.channel.send("This sort of speech is not allowed!!")
+		await message.delete()
+		message.channel.send()
+		await message.channel.send(prettify_message(message.author.name, message.content.replace("fuck", "flower")))
 
 # Run the bot with your token
 bot.run(env.BOT_TOKEN)
