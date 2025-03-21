@@ -1,6 +1,7 @@
 import discord
 from discord.mentions import AllowedMentions
 import env
+import genai_censor
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -24,18 +25,27 @@ class SwearAwayBot(discord.Client):
 
 		if should_censor(message.content):
 			await message.delete()
-			await message.channel.send(prettify_message(message.author.mention, message.content.replace("fuck", "flower")), allowed_mentions=allowed_mentions)
 
-def prettify_message(author_name: str, message: str):
+			censored_message = await censor_message(message.content)
+			formatted_message = prettify_message(message.author.mention, censored_message)
+
+			print(f"Censoring message '{message.content}' with '{censored_message}'")
+
+			await message.channel.send(formatted_message, allowed_mentions=allowed_mentions)
+
+def prettify_message(author_name: str, message: str) -> str:
 	return f"{author_name}:\n\"{message}\""
 
-def should_censor(message: str):
+def should_censor(message: str) -> bool:
 	message = message.lower()
 	for word in swear_words:
 		if word in message:
 			return True
 	return False
 
+async def censor_message(message: str) -> str:
+	return await genai_censor.censor(message)
+
 print(f"Censoring words: {swear_words}")
 bot = SwearAwayBot(intents=intents)
-bot.run(env.BOT_TOKEN)
+bot.run(env.DISCORD_BOT_TOKEN)
