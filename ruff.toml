@@ -1,0 +1,9 @@
+exclude = [".git", ".venv", ".vscode", "__pycache__"]
+
+line-length = 100
+indent-width = 4
+
+[format]
+quote-style = "double"
+indent-style = "tab"
+line-ending = "auto"
