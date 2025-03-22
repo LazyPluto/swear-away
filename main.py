@@ -18,9 +18,10 @@ with open("swear-words.txt") as f:
 
 class SwearAwayBot(discord.Client):
     async def on_ready(self):
-        print(f"Logged in as {bot.user.name}")
+        print(f"Logged in as {self.user.name}")
 
-    async def on_raw_message_edit(message: discord.RawMessageUpdateEvent.message):
+    async def on_raw_message_edit(self, event: discord.RawMessageUpdateEvent):
+        message = event.message
         if should_censor(message.content):
             await message.delete()
 
@@ -29,7 +30,8 @@ class SwearAwayBot(discord.Client):
                 message.author.mention, censored_message
             )
 
-            print(f"Censoring message '{message.content}' with '{censored_message}'")
+            print(f"Censoring message '{
+                  message.content}' with '{censored_message}'")
 
             await message.channel.send(
                 formatted_message, allowed_mentions=allowed_mentions
@@ -47,7 +49,8 @@ class SwearAwayBot(discord.Client):
                 message.author.mention, censored_message
             )
 
-            print(f"Censoring message '{message.content}' with '{censored_message}'")
+            print(f"Censoring message '{
+                  message.content}' with '{censored_message}'")
 
             await message.channel.send(
                 formatted_message, allowed_mentions=allowed_mentions
