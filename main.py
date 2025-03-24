@@ -33,7 +33,7 @@ class SwearAwayBot(discord.Client):
 			await message.channel.send(formatted_message, allowed_mentions=allowed_mentions)
 
 	async def on_message(self, message: discord.Message):
-		if message.author == bot.user:
+		if message.author == self.user:
 			return
 
 		if should_censor(message.content):
