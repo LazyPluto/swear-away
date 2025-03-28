@@ -1,7 +1,10 @@
 import discord
 from discord.mentions import AllowedMentions
-import env
+import dotenv
+import os
 import genai_censor
+
+dotenv.load_dotenv()
 
 intents = discord.Intents.default()
 intents.messages = True
@@ -65,4 +68,4 @@ async def censor_message(message: str) -> str:
 
 print(f"Censoring words: {swear_words}")
 bot = SwearAwayBot(intents=intents)
-bot.run(env.DISCORD_BOT_TOKEN)
+bot.run(os.getenv("DISCORD_BOT_TOKEN"))
