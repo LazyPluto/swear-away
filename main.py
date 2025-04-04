@@ -1,5 +1,7 @@
 import discord
 from discord.mentions import AllowedMentions
+from flask import Flask
+from threading import Thread
 import dotenv
 import os
 import genai_censor
@@ -65,6 +67,19 @@ def should_censor(message: str) -> bool:
 async def censor_message(message: str) -> str:
 	return await genai_censor.censor(message)
 
+
+app = Flask(__name__)
+
+
+@app.route("/")
+def status():
+	return "Bot is running!"
+
+
+port = int(os.getenv("PORT", "5000"))
+flask_thread = Thread(target=lambda: app.run(host="0.0.0.0", port=port))
+flask_thread.daemon = True
+flask_thread.start()
 
 print(f"Censoring words: {swear_words}")
 bot = SwearAwayBot(intents=intents)
